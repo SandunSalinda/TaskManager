@@ -20,14 +20,16 @@
     // For server-side rendering, we need to construct the full URL
     let baseUrl = '';
     if (typeof window === 'undefined') {
-      // Server-side: use environment variable or construct from headers
+      // Server-side: construct the base URL
       baseUrl = process.env.NEXT_PUBLIC_API_URL || 
-                process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
-                'http://localhost:3000';
+                (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
+                'http://localhost:3000');
     } else {
       // Client-side: use window.location
       baseUrl = window.location.origin;
     }
+    
+    console.log('Base URL:', baseUrl); // Debug log
     
     const res = await fetch(`${baseUrl}/api/tasks`, {
       cache: 'no-store', // Always get the latest data
