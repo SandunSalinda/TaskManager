@@ -31,12 +31,31 @@
     
     const res = await fetch(`${baseUrl}/api/tasks`, {
       cache: 'no-store', // Always get the latest data
-    });        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
-        }
+    });
 
-        const data = await res.json();
+    if (!res.ok) {
+      // Get the response text to see what's actually being returned
+      const responseText = await res.text();
+      console.error('API Error Response:', responseText);
+      
+      // Try to parse as JSON if possible, otherwise use the raw text
+      try {
+        const errorData = JSON.parse(responseText);
+        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+      } catch (parseError) {
+        throw new Error(`API returned HTML instead of JSON. Status: ${res.status}. Response: ${responseText.substring(0, 200)}...`);
+      }
+    }
+
+    const responseText = await res.text();
+    let data;
+    
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      console.error('JSON Parse Error - Response Text:', responseText.substring(0, 500));
+      throw new Error(`Invalid JSON response from API: ${responseText.substring(0, 200)}...`);
+    }
         if (data.success) {
           tasks = data.data;
         } else {
