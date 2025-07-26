@@ -14,18 +14,7 @@
   --muted: #64748b; /* Slate 500 */
 }
 
-/* Optional: Enhanced dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617; /* Slate 950 */
-    --foreground: #f1f5f9; /* Slate 100 */
-    --primary: #60a5fa; /* Blue 400 */
-    --primary-light: #1e293b; /* Slate 800 */
-    --secondary: #1e293b; /* Slate 800 */
-    --border: #334155; /* Slate 700 */
-    --muted: #94a3b8; /* Slate 400 */
-  }
-}
+/* Light theme enforced - dark mode disabled for minimal white/blue theme */
 
 /* Enhanced body styling */
 body {
