@@ -4,12 +4,12 @@ import dbConnect from "../../../../lib/dbConnect";
 import Task from "../../../../models/Task";
 import mongoose from "mongoose";
 
-// Define an interface for the route handler context, including params
-interface RouteContext {
-    params: {
-        id: string;
-    };
-}
+// Removed: RouteContext interface is no longer needed as type will be inlined.
+// interface RouteContext {
+//     params: {
+//         id: string;
+//     };
+// }
 
 // Helper to handle and log errors consistently
 const handleError = (error: unknown, message = "Internal Server Error", status = 500) => {
@@ -18,7 +18,8 @@ const handleError = (error: unknown, message = "Internal Server Error", status =
 };
 
 // GET a single task by ID
-export async function GET(_request: Request, context: RouteContext) { // Corrected context type, _request parameter
+// Inlined the type for the context parameter directly
+export async function GET(_request: Request, context: { params: { id: string } }) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // _request is unused in this specific GET handler, but required by Next.js function signature.
     try {
@@ -44,7 +45,8 @@ export async function GET(_request: Request, context: RouteContext) { // Correct
 }
 
 // PUT (Update) a single task by ID
-export async function PUT(request: Request, context: RouteContext) { // Corrected context type
+// Inlined the type for the context parameter directly
+export async function PUT(request: Request, context: { params: { id: string } }) {
     await dbConnect();
     const { id } = context.params;
 
@@ -93,7 +95,8 @@ export async function PUT(request: Request, context: RouteContext) { // Correcte
 }
 
 // DELETE a single task by ID
-export async function DELETE(_request: Request, context: RouteContext) { // Corrected context type, _request parameter
+// Inlined the type for the context parameter directly
+export async function DELETE(_request: Request, context: { params: { id: string } }) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // _request is unused in this specific DELETE handler, but required by Next.js function signature.
     await dbConnect();
