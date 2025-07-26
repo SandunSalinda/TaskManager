@@ -7,12 +7,12 @@ import mongoose from "mongoose";
 // GET a single task by ID
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
     
-    const { id } = params;
+    const { id } = await context.params;
     
     // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -47,12 +47,12 @@ export async function GET(
 // PUT (update) a task by ID
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
     
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     const { title, description, dueDate, status } = body;
 
@@ -95,8 +95,9 @@ export async function PUT(
     console.error("Error updating task:", error);
     
     // Handle Mongoose validation errors
-    if (error instanceof Error && (error as any).name === 'ValidationError') {
-      const messages = Object.values((error as any).errors).map((val: any) => val.message);
+    if (error instanceof Error && 'name' in error && error.name === 'ValidationError') {
+      const mongooseError = error as mongoose.Error.ValidationError;
+      const messages = Object.values(mongooseError.errors).map((val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => val.message);
       return NextResponse.json(
         { success: false, error: messages.join(', ') },
         { status: 400 }
@@ -116,12 +117,12 @@ export async function PUT(
 // DELETE a task by ID
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
     
-    const { id } = params;
+    const { id } = await context.params;
 
     // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(id)) {

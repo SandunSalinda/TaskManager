@@ -2,9 +2,10 @@
     import { NextResponse } from "next/server";
     import dbConnect from "../../lib/dbConnect"; // Adjust path if your lib folder is elsewhere
     import Task from "../../models/Task"; // Adjust path if your models folder is elsewhere
+    import mongoose from "mongoose";
 
     // GET all tasks
-    export async function GET(_request: Request) { // _request is unused, but required by Next.js function signature
+    export async function GET() { // _request is unused, but required by Next.js function signature
         try {
             await dbConnect(); // Connect to the database
             const tasks = await Task.find({}); // Find all tasks
@@ -43,8 +44,9 @@
         } catch (error: unknown) {
             console.error("Error creating task:", error);
             // Handle Mongoose validation errors specifically
-            if (error instanceof Error && (error as any).name === 'ValidationError') {
-                const messages = Object.values((error as any).errors).map((val: any) => val.message);
+            if (error instanceof Error && 'name' in error && error.name === 'ValidationError') {
+                const mongooseError = error as mongoose.Error.ValidationError;
+                const messages = Object.values(mongooseError.errors).map((val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => val.message);
                 return NextResponse.json({ success: false, error: messages.join(', ') }, { status: 400 });
             }
             return NextResponse.json(

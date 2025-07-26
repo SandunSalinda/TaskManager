@@ -16,9 +16,9 @@ interface Task {
 
 // Removed: RouteContext interface is not needed in client-side page components
 
-export default function EditTaskPage({ params }: { params: { id: string } }) {
-  // In Next.js 15+, params is now a plain object, not a Promise
-  const { id } = params;
+export default function EditTaskPage({ params }: { params: Promise<{ id: string }> }) {
+  // State to get id from params (in Next.js 15+ for client components)
+  const [id, setId] = useState<string | null>(null);
 
   // State to hold task data and form inputs
   const [task, setTask] = useState<Task | null>(null);
@@ -32,8 +32,15 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
 
   const router = useRouter();
 
+  // Get id from params
+  useEffect(() => {
+    params.then((p) => setId(p.id));
+  }, [params]);
+
   // Fetch task data when the component mounts or ID changes
   useEffect(() => {
+    if (!id) return; // Wait for id to be available
+    
     const fetchTask = async () => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -123,7 +130,7 @@ export default function EditTaskPage({ params }: { params: { id: string } }) {
     }
   };
 
-  if (loading && !task) { // Show loading only for initial fetch, not for form submission
+  if ((loading && !task) || !id) { // Show loading for initial fetch or when id is not available yet
     return (
       <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="text-center">
