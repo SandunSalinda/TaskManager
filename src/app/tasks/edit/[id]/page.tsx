@@ -14,8 +14,9 @@ interface Task {
   dueDate: string; // ISO string
 }
 
-export default function EditTaskPage({ params }: { params: { id: string } }) { // Corrected params type
-  const { id } = params; // Directly access id from params
+export default function EditTaskPage({ params }: { params: Promise<{ id: string }> }) {
+  // State to get id from params (in Next.js 15+ for client components)
+  const [id, setId] = useState<string | null>(null);
 
   // State to hold task data and form inputs
   const [task, setTask] = useState<Task | null>(null);
@@ -28,6 +29,11 @@ export default function EditTaskPage({ params }: { params: { id: string } }) { /
   const [error, setError] = useState<string | null>(null); // For any errors related to fetch or form submission
 
   const router = useRouter();
+
+  // Get id from params
+  useEffect(() => {
+    params.then((p) => setId(p.id));
+  }, [params]);
 
   // Fetch task data when the component mounts or ID changes
   useEffect(() => {
@@ -122,7 +128,7 @@ export default function EditTaskPage({ params }: { params: { id: string } }) { /
     }
   };
 
-  if (loading || !task) { // Simplified loading check: show loading if initial fetch is ongoing or task not loaded
+  if ((loading || !task) || !id) { // Show loading if initial fetch is ongoing, task not loaded, or id not available
     return (
       <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="text-center">

@@ -5,9 +5,7 @@ import Task from "../../../models/Task";
 import mongoose from "mongoose"; // Keep mongoose import for ValidationError type checking
 
 // GET all tasks
-export async function GET(_request: Request) { // Added _request parameter
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // _request is unused in this specific GET handler, but required by Next.js function signature.
+export async function GET() {
     try {
         await dbConnect();
         const tasks = await Task.find({});

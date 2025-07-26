@@ -18,13 +18,11 @@ const handleError = (error: unknown, message = "Internal Server Error", status =
 };
 
 // GET a single task by ID
-// Inlined the type for the context parameter directly
-export async function GET(_request: Request, context: { params: { id: string } }) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // _request is unused in this specific GET handler, but required by Next.js function signature.
+// Next.js 15 format with Promise params
+export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
     try {
         await dbConnect();
-        const { id } = context.params;
+        const { id } = await context.params;
 
         // Validate ObjectId format
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -45,10 +43,10 @@ export async function GET(_request: Request, context: { params: { id: string } }
 }
 
 // PUT (Update) a single task by ID
-// Inlined the type for the context parameter directly
-export async function PUT(request: Request, context: { params: { id: string } }) {
+// Next.js 15 format with Promise params
+export async function PUT(request: Request, context: { params: Promise<{ id: string }> }) {
     await dbConnect();
-    const { id } = context.params;
+    const { id } = await context.params;
 
     try {
         // Validate ObjectId format
@@ -95,12 +93,10 @@ export async function PUT(request: Request, context: { params: { id: string } })
 }
 
 // DELETE a single task by ID
-// Inlined the type for the context parameter directly
-export async function DELETE(_request: Request, context: { params: { id: string } }) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // _request is unused in this specific DELETE handler, but required by Next.js function signature.
+// Next.js 15 format with Promise params
+export async function DELETE(_request: Request, context: { params: Promise<{ id: string }> }) {
     await dbConnect();
-    const { id } = context.params;
+    const { id } = await context.params;
 
     try {
         // Validate ObjectId format
