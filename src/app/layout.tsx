@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google"; // Import Manrope font
 import "./globals.css";
+import { NotificationProvider } from "@/lib/NotificationContext";
 
 // Configure the Manrope font
 const manrope = Manrope({
@@ -26,7 +27,9 @@ export default function RootLayout({
         // Apply the Manrope font variable to the body
         className={`${manrope.variable} font-sans antialiased`} // 'font-sans' is a Tailwind utility that defaults to --font-manrope now
       >
-        {children}
+        <NotificationProvider>
+          {children}
+        </NotificationProvider>
       </body>
     </html>
   );

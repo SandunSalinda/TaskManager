@@ -56,7 +56,8 @@ export default function CreateTaskPage() {
         throw new Error(data.error || 'Failed to create task');
       }
 
-      router.push('/');
+      // Redirect with success parameter instead of showing notification here
+      router.push('/?created=success');
       router.refresh();
     } catch (err: unknown) {
       if (process.env.NODE_ENV === 'development') {
@@ -70,24 +71,24 @@ export default function CreateTaskPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 transition-all duration-300 p-10">
-        <header className="flex items-center justify-between mb-10 pb-6 border-b border-slate-200">
-          <Link href="/" className="
-            flex items-center space-x-2 text-slate-600 hover:text-blue-600
-            font-medium transition-colors duration-200
-          ">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
-            <span>Back to Home</span>
-          </Link>
-          <div className="text-right flex-shrink-0">
-            <h1 className="text-2xl font-bold text-gradient">
-              Create New Task
-            </h1>
-            <p className="text-sm text-slate-600 mt-1">Add a new task to your workflow</p>
-          </div>
-        </header>
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 transition-all duration-300 p-10">
+          <header className="flex items-center justify-between mb-10 pb-6 border-b border-slate-200">
+            <Link href="/" className="
+              flex items-center space-x-2 text-slate-600 hover:text-blue-600
+              font-medium transition-colors duration-200
+            ">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+              <span>Back to Home</span>
+            </Link>
+            <div className="text-right flex-shrink-0">
+              <h1 className="text-2xl font-bold text-gradient">
+                Create New Task
+              </h1>
+              <p className="text-sm text-slate-600 mt-1">Add a new task to your workflow</p>
+            </div>
+          </header>
 
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-10 shadow-sm" role="alert">
@@ -158,26 +159,29 @@ export default function CreateTaskPage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 pt-8">
-            <Link href="/" className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-6 py-3 rounded-lg transition-all duration-200 border border-slate-200 hover:border-slate-300 flex-1 text-center">
+          <div className="flex flex-col sm:flex-row gap-3 pt-8">
+            <Link 
+              href="/" 
+              className="flex-1 inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 border border-slate-200 rounded-lg hover:bg-slate-200 hover:border-slate-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+            >
               Cancel
             </Link>
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98] flex-1 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+              className="flex-1 inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
               {loading ? (
-                <span className="flex items-center justify-center space-x-2">
-                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <>
+                  <svg className="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  <span>Creating...</span>
-                </span>
+                  Creating...
+                </>
               ) : (
                 <>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                   Create Task
