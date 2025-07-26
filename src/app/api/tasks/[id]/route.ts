@@ -4,155 +4,121 @@ import dbConnect from "../../../../lib/dbConnect";
 import Task from "../../../../models/Task";
 import mongoose from "mongoose";
 
+// Define an interface for the route handler context, including params
+interface RouteContext {
+    params: {
+        id: string;
+    };
+}
+
+// Helper to handle and log errors consistently
+const handleError = (error: unknown, message = "Internal Server Error", status = 500) => {
+    console.error("API Error:", error);
+    return NextResponse.json({ success: false, error: message }, { status });
+};
+
 // GET a single task by ID
-export async function GET(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  try {
-    await dbConnect();
-    
-    const { id } = await context.params;
-    
-    // Validate ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid task ID format" },
-        { status: 400 }
-      );
-    }
+export async function GET(_request: Request, context: RouteContext) { // Corrected context type, _request parameter
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // _request is unused in this specific GET handler, but required by Next.js function signature.
+    try {
+        await dbConnect();
+        const { id } = context.params;
 
-    const task = await Task.findById(id);
-    
-    if (!task) {
-      return NextResponse.json(
-        { success: false, error: "Task not found" },
-        { status: 404 }
-      );
-    }
+        // Validate ObjectId format
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return handleError(null, "Invalid task ID format", 400); // Use handleError
+        }
 
-    return NextResponse.json({ success: true, data: task }, { status: 200 });
-  } catch (error: unknown) {
-    console.error("Error fetching task:", error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : "An unknown error occurred" 
-      },
-      { status: 500 }
-    );
-  }
+        const task = await Task.findById(id);
+        if (!task) {
+            return handleError(null, "Task not found", 404);
+        }
+        return NextResponse.json({ success: true, data: task }, { status: 200 });
+    } catch (error: unknown) {
+        if (error instanceof mongoose.Error.CastError) {
+            return handleError(error, "Invalid Task ID format", 400);
+        }
+        return handleError(error, "Error fetching task");
+    }
 }
 
-// PUT (update) a task by ID
-export async function PUT(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  try {
+// PUT (Update) a single task by ID
+export async function PUT(request: Request, context: RouteContext) { // Corrected context type
     await dbConnect();
-    
-    const { id } = await context.params;
-    const body = await request.json();
-    const { title, description, dueDate, status } = body;
+    const { id } = context.params;
 
-    // Validate ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid task ID format" },
-        { status: 400 }
-      );
+    try {
+        // Validate ObjectId format
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return handleError(null, "Invalid task ID format", 400);
+        }
+
+        const body = await request.json();
+        const { title, description, dueDate, status } = body;
+
+        // Basic validation for required fields
+        if (!title || !description || !dueDate) {
+            return handleError(null, "Title, description, and due date are required", 400);
+        }
+
+        const updatedTask = await Task.findByIdAndUpdate(
+            id,
+            {
+                title,
+                description,
+                dueDate: new Date(dueDate),
+                status: status || 'pending',
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedTask) {
+            return handleError(null, "Task not found", 404);
+        }
+
+        return NextResponse.json({ success: true, data: updatedTask }, { status: 200 });
+    } catch (error: unknown) {
+        if (error instanceof mongoose.Error.CastError) {
+            return handleError(error, "Invalid Task ID format", 400);
+        }
+        if (error instanceof mongoose.Error.ValidationError) {
+            const messages = Object.values(error.errors).map(
+                (val: mongoose.Error.ValidatorError | { message?: string }) => val.message
+            ).filter(Boolean);
+            return handleError(error, messages.join(', '), 400);
+        }
+        return handleError(error, "Error updating task");
     }
-
-    // Basic validation
-    if (!title || !description || !dueDate) {
-      return NextResponse.json(
-        { success: false, error: "Title, description, and due date are required" },
-        { status: 400 }
-      );
-    }
-
-    const updatedTask = await Task.findByIdAndUpdate(
-      id,
-      {
-        title,
-        description,
-        dueDate: new Date(dueDate),
-        status: status || 'pending',
-      },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedTask) {
-      return NextResponse.json(
-        { success: false, error: "Task not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ success: true, data: updatedTask }, { status: 200 });
-  } catch (error: unknown) {
-    console.error("Error updating task:", error);
-    
-    // Handle Mongoose validation errors
-    if (error instanceof Error && 'name' in error && error.name === 'ValidationError') {
-      const mongooseError = error as mongoose.Error.ValidationError;
-      const messages = Object.values(mongooseError.errors).map((val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => val.message);
-      return NextResponse.json(
-        { success: false, error: messages.join(', ') },
-        { status: 400 }
-      );
-    }
-    
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : "An unknown error occurred" 
-      },
-      { status: 500 }
-    );
-  }
 }
 
-// DELETE a task by ID
-export async function DELETE(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  try {
+// DELETE a single task by ID
+export async function DELETE(_request: Request, context: RouteContext) { // Corrected context type, _request parameter
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // _request is unused in this specific DELETE handler, but required by Next.js function signature.
     await dbConnect();
-    
-    const { id } = await context.params;
+    const { id } = context.params;
 
-    // Validate ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid task ID format" },
-        { status: 400 }
-      );
+    try {
+        // Validate ObjectId format
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return handleError(null, "Invalid task ID format", 400);
+        }
+
+        const deletedTask = await Task.findByIdAndDelete(id);
+
+        if (!deletedTask) {
+            return handleError(null, "Task not found", 404);
+        }
+
+        return NextResponse.json(
+            { success: true, message: "Task deleted successfully" },
+            { status: 200 }
+        );
+    } catch (error: unknown) {
+        if (error instanceof mongoose.Error.CastError) {
+            return handleError(error, "Invalid Task ID format", 400);
+        }
+        return handleError(error, "Error deleting task");
     }
-
-    const deletedTask = await Task.findByIdAndDelete(id);
-
-    if (!deletedTask) {
-      return NextResponse.json(
-        { success: false, error: "Task not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      { success: true, message: "Task deleted successfully" },
-      { status: 200 }
-    );
-  } catch (error: unknown) {
-    console.error("Error deleting task:", error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : "An unknown error occurred" 
-      },
-      { status: 500 }
-    );
-  }
 }

@@ -1,7 +1,7 @@
 // src/app/tasks/edit/[id]/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Removed 'use' import
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -14,11 +14,8 @@ interface Task {
   dueDate: string; // ISO string
 }
 
-// Removed: RouteContext interface is not needed in client-side page components
-
-export default function EditTaskPage({ params }: { params: Promise<{ id: string }> }) {
-  // State to get id from params (in Next.js 15+ for client components)
-  const [id, setId] = useState<string | null>(null);
+export default function EditTaskPage({ params }: { params: { id: string } }) { // Corrected params type
+  const { id } = params; // Directly access id from params
 
   // State to hold task data and form inputs
   const [task, setTask] = useState<Task | null>(null);
@@ -32,15 +29,10 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
 
   const router = useRouter();
 
-  // Get id from params
-  useEffect(() => {
-    params.then((p) => setId(p.id));
-  }, [params]);
-
   // Fetch task data when the component mounts or ID changes
   useEffect(() => {
-    if (!id) return; // Wait for id to be available
-    
+    if (!id) return; // Ensure id is available before fetching
+
     const fetchTask = async () => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -64,9 +56,9 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
         }
       } catch (err: unknown) { // Use unknown for caught errors
         console.error("Error fetching task:", err);
-        // Handle different types of errors
+        // Handle different types of errors based on message content
         if (err instanceof Error) {
-          // Check for MongoDB CastError (invalid ObjectId format)
+          // Check for MongoDB CastError (invalid ObjectId format) by message content
           if (err.message.includes('Cast to ObjectId failed') || err.message.includes('Invalid task ID')) {
             setError("Invalid task ID format. Please check the URL.");
           } else {
@@ -81,7 +73,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
     };
 
     fetchTask();
-  }, [id]);
+  }, [id]); // Depend on 'id' to re-fetch when it becomes available
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -130,7 +122,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
     }
   };
 
-  if ((loading && !task) || !id) { // Show loading for initial fetch or when id is not available yet
+  if (loading || !task) { // Simplified loading check: show loading if initial fetch is ongoing or task not loaded
     return (
       <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="text-center">
@@ -141,22 +133,21 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
     );
   }
 
-  if (error || !task) { // If there's an error or task isn't loaded after trying
+  if (error) { // If there's an error (and task is null or partially loaded due to error)
     return (
       <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 border border-blue-100 text-center">
           <h1 className="text-3xl font-bold text-red-600 mb-4">
-              {error ? "Error Loading Task" : "Task Not Found"}
+              Error Loading Task
           </h1>
           {error && <p className="text-red-700">{error}</p>}
-          {!task && !error && <p className="text-gray-600">The task with ID &quot;{id}&quot; could not be found.</p>}
           <p className="text-gray-600 mt-4">Go back to the <Link href="/" className="text-blue-500 hover:underline">home page</Link>.</p>
         </div>
       </div>
     );
   }
 
-  // Render the form once the task is loaded
+  // Render the form once the task is loaded and no error
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 border border-blue-100">
