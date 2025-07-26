@@ -131,7 +131,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
   if ((loading || !task) || !id) { // Show loading if initial fetch is ongoing, task not loaded, or id not available
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="card p-8 text-center">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 transition-all duration-300 p-8 text-center">
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="animate-spin w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

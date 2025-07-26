@@ -74,7 +74,7 @@ export default function SimpleCalendar() {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="card p-6">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 transition-all duration-300 p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-lg font-semibold text-slate-800">

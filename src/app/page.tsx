@@ -54,13 +54,13 @@
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-gradient">
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                     Task Manager
                   </h1>
                   <p className="text-slate-600 text-sm">Organize your work efficiently</p>
                 </div>
               </div>
-              <Link href="/tasks/new" className="btn-primary flex items-center space-x-2">
+              <Link href="/tasks/new" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98] flex items-center space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -89,7 +89,7 @@
                 <div className="sticky top-8">
                   <SimpleCalendar />
                   {/* Task Summary Card */}
-                  <div className="mt-6 card p-4">
+                  <div className="mt-6 bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                     <h3 className="font-semibold text-slate-700 mb-3">Task Summary</h3>
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
@@ -116,7 +116,7 @@
               {/* Enhanced Main Task List Area */}
               <div className="lg:col-span-4">
                 {tasks.length === 0 && !error ? (
-                  <div className="card p-12 text-center">
+                  <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
                     <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-6">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-blue-600">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3-9h3.75M12 3v9m0 0l3-3m-3 3l-3-3m12 6v-6a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v6" />
@@ -128,7 +128,7 @@
                     <p className="text-slate-500 mb-6">
                       Start by creating your first task to organize your workflow!
                     </p>
-                    <Link href="/tasks/new" className="btn-primary inline-flex items-center space-x-2">
+                    <Link href="/tasks/new" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98] inline-flex items-center space-x-2">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                       </svg>
@@ -139,7 +139,7 @@
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {tasks.map((task) => (
                       <div key={task._id} className={`
-                        card p-6 hover:scale-[1.02] flex flex-col relative overflow-hidden group
+                        bg-white rounded-xl shadow-sm border border-slate-200 transition-all duration-300 p-6 hover:scale-[1.02] flex flex-col relative overflow-hidden group hover:shadow-md hover:border-slate-300
                         ${
                           // Enhanced status indicators with subtle left border
                           task.status === 'pending' ? 'border-l-4 border-yellow-400 bg-gradient-to-r from-yellow-50/50 to-white' :

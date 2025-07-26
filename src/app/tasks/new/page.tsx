@@ -71,7 +71,7 @@
 
       return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-          <div className="w-full max-w-2xl card p-8">
+          <div className="w-full max-w-2xl bg-white rounded-xl shadow-sm border border-slate-200 transition-all duration-300 p-8">
             <header className="flex items-center justify-between mb-8 pb-6 border-b border-slate-200">
               <Link href="/" className="
                 flex items-center space-x-2 text-slate-600 hover:text-blue-600
@@ -106,11 +106,11 @@
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="title" className="label-text">Task Title</label>
+                <label htmlFor="title" className="block text-sm font-semibold text-slate-700 mb-2">Task Title</label>
                 <input
                   type="text"
                   id="title"
-                  className="input-field"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white placeholder-slate-400"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Review project proposal"
@@ -119,11 +119,11 @@
               </div>
 
               <div>
-                <label htmlFor="description" className="label-text">Description</label>
+                <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
                 <textarea
                   id="description"
                   rows={4}
-                  className="input-field resize-none"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white placeholder-slate-400 resize-none"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Provide detailed information about the task..."
@@ -133,11 +133,11 @@
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="dueDate" className="label-text">Due Date</label>
+                  <label htmlFor="dueDate" className="block text-sm font-semibold text-slate-700 mb-2">Due Date</label>
                   <input
                     type="date"
                     id="dueDate"
-                    className="input-field"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white placeholder-slate-400"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
                     required
@@ -145,10 +145,10 @@
                 </div>
 
                 <div>
-                  <label htmlFor="status" className="label-text">Initial Status</label>
+                  <label htmlFor="status" className="block text-sm font-semibold text-slate-700 mb-2">Initial Status</label>
                   <select
                     id="status"
-                    className="input-field"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white placeholder-slate-400"
                     value={status}
                     onChange={(e) => setStatus(e.target.value as 'pending' | 'in-progress' | 'completed')}
                   >
@@ -160,12 +160,12 @@
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <Link href="/" className="btn-secondary flex-1 text-center">
+                <Link href="/" className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-6 py-3 rounded-lg transition-all duration-200 border border-slate-200 hover:border-slate-300 flex-1 text-center">
                   Cancel
                 </Link>
                 <button
                   type="submit"
-                  className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-[0.98] flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                 >
                   {loading ? (
