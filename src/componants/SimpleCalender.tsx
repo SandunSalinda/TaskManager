@@ -103,7 +103,7 @@ export default function SimpleCalendar() {
       </div>
 
       {/* Day headers */}
-      <div className="grid grid-cols-7 gap-1 text-center text-slate-500 text-xs font-medium mb-3">
+      <div className="grid grid-cols-7 gap-3 text-center text-slate-500 text-xs font-medium mb-3">
         {dayNames.map(day => (
           <div key={day} className="py-2">{day}</div>
         ))}

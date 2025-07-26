@@ -1,7 +1,7 @@
 // src/app/tasks/edit/[id]/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react'; // Removed 'use' import
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -150,7 +150,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
       <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 border border-blue-100 text-center">
           <h1 className="text-3xl font-bold text-red-600 mb-4">
-              Error Loading Task
+            Error Loading Task
           </h1>
           {error && <p className="text-red-700">{error}</p>}
           <p className="text-gray-600 mt-4">Go back to the <Link href="/" className="text-blue-500 hover:underline">home page</Link>.</p>
@@ -162,8 +162,8 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
   // Render the form once the task is loaded and no error
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 border border-blue-100">
-        <header className="flex flex-col sm:flex-row justify-between items-center mb-8 pb-6 border-b border-blue-100">
+      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-10 border border-blue-100">
+        <header className="flex flex-col sm:flex-row justify-between items-center mb-10 pb-6 border-b border-blue-100">
           <Link href="/" className="
             flex items-center space-x-2 text-blue-600 hover:text-blue-800
             font-medium text-lg transition-colors duration-200 mb-4 sm:mb-0
@@ -179,19 +179,19 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
         </header>
 
         {error && ( // Display submission error if any
-          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg relative mb-8 shadow-sm" role="alert">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg relative mb-10 shadow-sm" role="alert">
             <strong className="font-bold">Error:</strong>
             <span className="block sm:inline ml-2"> {error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-7">
           <div>
             <label htmlFor="title" className="block text-gray-800 text-lg font-semibold mb-2">Title</label>
             <input
               type="text"
               id="title"
-              className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 text-base placeholder-gray-400"
+              className="w-full px-4 py-3.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 text-lg placeholder-gray-400"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g., Update project proposal"
@@ -204,7 +204,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
             <textarea
               id="description"
               rows={5}
-              className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 resize-y text-base placeholder-gray-400"
+              className="w-full px-4 py-3.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 resize-y text-lg placeholder-gray-400"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g., Review feedback and integrate changes for final submission"
@@ -217,7 +217,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
             <input
               type="date"
               id="dueDate"
-              className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 text-base"
+              className="w-full px-4 py-3.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 text-lg"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               required
@@ -228,7 +228,7 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
             <label htmlFor="status" className="block text-gray-800 text-lg font-semibold mb-2">Status</label>
             <select
               id="status"
-              className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 text-base bg-white"
+              className="w-full px-4 py-3.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 text-gray-800 transition duration-200 text-lg bg-white"
               value={status}
               onChange={(e) => setStatus(e.target.value as 'pending' | 'in-progress' | 'completed')}
             >
