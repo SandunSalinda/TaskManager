@@ -41,11 +41,8 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
 
     const fetchTask = async () => {
       try {
-        // Use relative URLs for production, allow override for development
-        const baseUrl = process.env.NODE_ENV === 'production' 
-          ? '' // Use relative URLs in production
-          : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
-        const res = await fetch(`${baseUrl}/api/tasks/${id}`);
+        // Client-side component: use relative URLs which work in browser
+        const res = await fetch(`/api/tasks/${id}`);
 
         if (!res.ok) {
           const errorData = await res.json();
@@ -106,11 +103,8 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
     };
 
     try {
-      // Use relative URLs for production, allow override for development
-      const baseUrl = process.env.NODE_ENV === 'production' 
-        ? '' // Use relative URLs in production
-        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
-      const res = await fetch(`${baseUrl}/api/tasks/${id}`, {
+      // Client-side component: use relative URLs which work in browser
+      const res = await fetch(`/api/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

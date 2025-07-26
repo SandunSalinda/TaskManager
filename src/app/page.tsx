@@ -17,10 +17,18 @@
       let error: string | null = null;
 
   try{
-    // For production, use relative URLs. For development, allow override
-    const baseUrl = process.env.NODE_ENV === 'production' 
-      ? '' // Use relative URLs in production
-      : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+    // For server-side rendering, we need to construct the full URL
+    let baseUrl = '';
+    if (typeof window === 'undefined') {
+      // Server-side: use environment variable or construct from headers
+      baseUrl = process.env.NEXT_PUBLIC_API_URL || 
+                process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
+                'http://localhost:3000';
+    } else {
+      // Client-side: use window.location
+      baseUrl = window.location.origin;
+    }
+    
     const res = await fetch(`${baseUrl}/api/tasks`, {
       cache: 'no-store', // Always get the latest data
     });        if (!res.ok) {

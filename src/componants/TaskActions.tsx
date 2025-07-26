@@ -18,11 +18,8 @@ export default function TaskActions({ taskId }: TaskActionsProps) {
     }
 
     try {
-      // Use relative URLs for production, allow override for development
-      const baseUrl = process.env.NODE_ENV === 'production' 
-        ? '' // Use relative URLs in production
-        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
-      const res = await fetch(`${baseUrl}/api/tasks/${taskId}`, {
+      // Client-side component: use relative URLs which work in browser
+      const res = await fetch(`/api/tasks/${taskId}`, {
         method: 'DELETE',
       });
 
