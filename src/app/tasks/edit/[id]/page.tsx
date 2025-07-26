@@ -41,7 +41,10 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
 
     const fetchTask = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+        // Use relative URLs for production, allow override for development
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? '' // Use relative URLs in production
+          : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
         const res = await fetch(`${baseUrl}/api/tasks/${id}`);
 
         if (!res.ok) {
@@ -103,7 +106,10 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
     };
 
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      // Use relative URLs for production, allow override for development
+      const baseUrl = process.env.NODE_ENV === 'production' 
+        ? '' // Use relative URLs in production
+        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
       const res = await fetch(`${baseUrl}/api/tasks/${id}`, {
         method: 'PUT',
         headers: {
