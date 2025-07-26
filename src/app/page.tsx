@@ -42,74 +42,137 @@
       }
 
       return (
-        // Overall page container with a very light blue background and increased vertical padding
-        <div className="min-h-screen bg-blue-50 py-12 px-4 sm:px-6 lg:px-8">
-          <div className="container mx-auto max-w-6xl"> {/* Increased max-width for more content space */}
-            <header className="flex flex-col sm:flex-row justify-between items-center mb-12 p-8 bg-white rounded-2xl shadow-lg border border-blue-100">
-              <h1 className="text-4xl font-extrabold text-blue-700 mb-6 sm:mb-0 text-center sm:text-left tracking-tight">
-                Task Manager
-              </h1>
-              <Link href="/tasks/new" className="
-                bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-full shadow-lg hover:shadow-xl
-                transition-all duration-300 transform hover:scale-105
-                text-lg whitespace-nowrap flex items-center justify-center space-x-2
-              ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+        // Enhanced page container with subtle gradient background
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto max-w-7xl">
+            {/* Enhanced header with subtle glass effect */}
+            <header className="flex flex-col sm:flex-row justify-between items-center mb-8 p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
+              <div className="flex items-center space-x-4 mb-6 sm:mb-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-gradient">
+                    Task Manager
+                  </h1>
+                  <p className="text-slate-600 text-sm">Organize your work efficiently</p>
+                </div>
+              </div>
+              <Link href="/tasks/new" className="btn-primary flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-                <span>Create New Task</span>
+                <span>Create Task</span>
               </Link>
             </header>
 
             {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg relative mb-10 shadow-md" role="alert">
-                <strong className="font-bold">Error:</strong>
-                <span className="block sm:inline ml-2"> {error}</span>
+              <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-8 shadow-sm" role="alert">
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <strong className="font-semibold">Error:</strong>
+                    <span className="ml-2">{error}</span>
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* Main content grid: sidebar for calendar and main task list */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8"> {/* Adjusted grid for sidebar */}
-              {/* Calendar Sidebar */}
-              <div className="lg:col-span-1"> {/* Takes 1 column on large screens */}
-                <SimpleCalendar />
-                {/* You can add more sidebar content here later if needed */}
+            {/* Enhanced main content grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              {/* Enhanced Calendar Sidebar */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-8">
+                  <SimpleCalendar />
+                  {/* Task Summary Card */}
+                  <div className="mt-6 card p-4">
+                    <h3 className="font-semibold text-slate-700 mb-3">Task Summary</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Total</span>
+                        <span className="font-semibold text-slate-800">{tasks.length}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-yellow-600">Pending</span>
+                        <span className="font-semibold text-yellow-700">{tasks.filter(t => t.status === 'pending').length}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-blue-600">In Progress</span>
+                        <span className="font-semibold text-blue-700">{tasks.filter(t => t.status === 'in-progress').length}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-green-600">Completed</span>
+                        <span className="font-semibold text-green-700">{tasks.filter(t => t.status === 'completed').length}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Main Task List Area */}
-              <div className="lg:col-span-3"> {/* Takes 3 columns on large screens */}
+              {/* Enhanced Main Task List Area */}
+              <div className="lg:col-span-4">
                 {tasks.length === 0 && !error ? (
-                  <div className="bg-white p-12 rounded-2xl shadow-lg border border-blue-100 text-center mt-0"> {/* Removed mt-12, aligned with grid */}
-                    <p className="text-gray-700 text-3xl font-semibold mb-4">
-                      No tasks found.
+                  <div className="card p-12 text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-blue-600">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3-9h3.75M12 3v9m0 0l3-3m-3 3l-3-3m12 6v-6a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v6" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-semibold text-slate-700 mb-3">
+                      No tasks yet
+                    </h3>
+                    <p className="text-slate-500 mb-6">
+                      Start by creating your first task to organize your workflow!
                     </p>
-                    <p className="text-gray-600 text-xl">
-                      Start by creating your first task to organize your day!
-                    </p>
+                    <Link href="/tasks/new" className="btn-primary inline-flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                      <span>Create First Task</span>
+                    </Link>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"> {/* Adjusted to 2-3 columns within its 3-column parent */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {tasks.map((task) => (
                       <div key={task._id} className={`
-                        bg-white rounded-2xl shadow-md p-6 border border-blue-100
-                        transform transition-all duration-300 hover:scale-[1.01] hover:shadow-lg
-                        flex flex-col relative overflow-hidden
+                        card p-6 hover:scale-[1.02] flex flex-col relative overflow-hidden group
                         ${
-                          // Add colored top border based on status
-                          task.status === 'pending' ? 'border-t-4 border-yellow-500' :
-                          task.status === 'in-progress' ? 'border-t-4 border-blue-500' :
-                          'border-t-4 border-green-500'
+                          // Enhanced status indicators with subtle left border
+                          task.status === 'pending' ? 'border-l-4 border-yellow-400 bg-gradient-to-r from-yellow-50/50 to-white' :
+                          task.status === 'in-progress' ? 'border-l-4 border-blue-400 bg-gradient-to-r from-blue-50/50 to-white' :
+                          'border-l-4 border-green-400 bg-gradient-to-r from-green-50/50 to-white'
                         }
                       `}>
-                        <h2 className="text-xl font-bold text-gray-800 mb-3 leading-tight">{task.title}</h2>
-                        <p className="text-gray-700 mb-5 text-base flex-grow leading-relaxed">{task.description}</p>
+                        {/* Status badge */}
+                        <div className="absolute top-4 right-4">
+                          <div className={`
+                            px-2 py-1 text-xs font-medium rounded-full
+                            ${
+                              task.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                              task.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                              'bg-green-100 text-green-700'
+                            }
+                          `}>
+                            {task.status === 'in-progress' ? 'In Progress' : task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                          </div>
+                        </div>
 
-                        <div className="flex items-center justify-between mb-5 mt-auto">
+                        <h2 className="text-xl font-bold text-slate-800 mb-3 pr-20 leading-tight group-hover:text-blue-700 transition-colors">{task.title}</h2>
+                        <p className="text-slate-600 mb-6 flex-grow leading-relaxed">{task.description}</p>
+
+                        <div className="flex items-center justify-between mb-4 pt-4 border-t border-slate-100">
                           <TaskStatusDropdown taskId={task._id} initialStatus={task.status} />
 
-                          <span className="text-sm text-gray-600">
-                            Due: {new Date(task.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                          </span>
+                          <div className="flex items-center text-sm text-slate-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-1">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5a2.25 2.25 0 012.25 2.25v7.5" />
+                            </svg>
+                            {new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </div>
                         </div>
 
                         <TaskActions taskId={task._id} />

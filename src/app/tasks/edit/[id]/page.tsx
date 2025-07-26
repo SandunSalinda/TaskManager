@@ -130,10 +130,16 @@ export default function EditTaskPage({ params }: { params: Promise<{ id: string 
 
   if ((loading || !task) || !id) { // Show loading if initial fetch is ongoing, task not loaded, or id not available
     return (
-      <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-blue-600 mb-4">Loading Task...</h1>
-          <p className="text-gray-600">Please wait.</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+        <div className="card p-8 text-center">
+          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="animate-spin w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <h1 className="text-2xl font-semibold text-slate-700 mb-2">Loading Task</h1>
+          <p className="text-slate-500">Please wait while we fetch the task details...</p>
         </div>
       </div>
     );
